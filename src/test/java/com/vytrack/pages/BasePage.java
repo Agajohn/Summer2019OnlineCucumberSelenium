@@ -2,6 +2,7 @@ package com.vytrack.pages;
 
 import com.vytrack.utilities.BrowserUtils;
 import com.vytrack.utilities.Driver;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
@@ -19,6 +20,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 //top menu appears on every single page
 //so we can keep them here
 public class BasePage {
+    private static Logger logger = Logger.getLogger(BasePage.class);
 
     @FindBy(css = "div[class='loader-mask shown']")
     public WebElement loaderMask;
@@ -57,11 +59,12 @@ public class BasePage {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div[class='loader-mask shown']")));
             return true;
         } catch (NoSuchElementException e) {
-            System.out.println("Loader mask not found!");
+            logger.warn("Loader mask not found!");
             e.printStackTrace();
             return true; // no loader mask, all good, return true
         } catch (WebDriverException e) {
             e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return false;
     }
@@ -72,7 +75,7 @@ public class BasePage {
      * and module name, for example "Vehicles" as a String as well
      * then based on these values, locators will be created
      *
-     * @param moduleName
+     * @param moduleName bla bla
      * @param subModuleName normalize-space() same line .trim() in java
      */
     public void navigateTo(String moduleName, String subModuleName) {
